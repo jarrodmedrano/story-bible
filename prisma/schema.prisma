@@ -48,6 +48,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime? @map(name: "email_verified")
   image         String?
+  characters    Character[]
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
@@ -63,4 +64,19 @@ model VerificationRequest {
   updatedAt  DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "verification_requests")
+}
+
+model Character {
+  id        Int @default(autoincrement()) @id
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  name      String?
+  bloodType String?
+  eyes      String?
+  height    String?
+  weight    String?
+  createdAt    DateTime @default(now()) @map(name: "created_at")
+  updatedAt    DateTime @default(now()) @map(name: "updated_at")
+
+  @@map(name: "characters")
 }
