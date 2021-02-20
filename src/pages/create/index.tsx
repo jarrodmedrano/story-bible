@@ -1,6 +1,6 @@
 import React from 'react'
 import { signIn, signOut, useSession } from 'next-auth/client'
-import { useQuery, gql, useMutation } from '@apollo/client'
+import { useQuery, gql } from '@apollo/client'
 import Image from 'next/image'
 import { Hero } from 'components/Hero/Hero'
 
@@ -12,7 +12,7 @@ export const exampleQuery = gql`
   }
 `
 
-const IndexPage = () => {
+const CreatePage = () => {
   const [session, loading] = useSession()
   if (loading) {
     return (
@@ -40,4 +40,4 @@ const IndexPage = () => {
   }
 }
 
-export default IndexPage
+export default CreatePage
