@@ -6,6 +6,7 @@ const apolloServer = new ApolloServer({
   schema,
   context: createContext,
   playground: process.env.NODE_ENV !== 'production',
+  tracing: process.env.NODE_ENV !== 'production',
 })
 
 export default apolloServer.createHandler({ path: '/api/graphql' })
