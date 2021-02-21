@@ -1,4 +1,4 @@
-import { objectType, extendType } from '@nexus/schema'
+import { objectType, arg, extendType } from 'nexus'
 
 export const User = objectType({
   name: 'User',
@@ -6,22 +6,52 @@ export const User = objectType({
     t.model.id()
     t.model.name()
     t.model.email()
+    t.model.emailVerified()
     t.model.image()
+    t.model.characters()
     t.model.createdAt()
     t.model.updatedAt()
   },
 })
 
-export const UserQueries = extendType({
+export const userQuery = extendType({
   type: 'Query',
-  definition: (t) => {
+  definition(t) {
     t.crud.user()
+    t.field('findFirstUser', {
+      type: 'User',
+      args: {
+        where: 'UserWhereInput',
+        orderBy: arg({ type: 'UserOrderByInput' }),
+        cursor: 'UserWhereUniqueInput',
+        skip: 'Int',
+        take: 'Int',
+      },
+      async resolve(_root, args, ctx) {
+        return ctx.prisma.user.findFirst(args as any)
+      },
+    })
+    t.crud.users({ filtering: true, ordering: true })
+    t.field('usersCount', {
+      type: 'Int',
+      args: {
+        where: 'UserWhereInput',
+      },
+      async resolve(_root, args, ctx) {
+        return ctx.prisma.user.count(args as any)
+      },
+    })
   },
 })
 
-export const UserMutations = extendType({
+export const userMutation = extendType({
   type: 'Mutation',
-  definition: (t) => {
+  definition(t) {
     t.crud.createOneUser()
+    t.crud.updateOneUser()
+    t.crud.upsertOneUser()
+    t.crud.deleteOneUser()
+    t.crud.updateManyUser()
+    t.crud.deleteManyUser()
   },
 })
