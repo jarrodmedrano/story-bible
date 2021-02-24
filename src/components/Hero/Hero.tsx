@@ -1,7 +1,6 @@
-import { signIn, signOut, useSession } from 'next-auth/client'
+import { signOut, useSession } from 'next-auth/client'
 import { useQuery, gql, useMutation } from '@apollo/client'
 import { useForm } from 'react-hook-form'
-import classNames from 'classNames'
 import React from 'react'
 
 export const exampleQuery = gql`
@@ -12,7 +11,16 @@ export const exampleQuery = gql`
   }
 `
 
+const CREATE_CHARACTER = gql`
+  mutation characterMutation($data: CharacterCreateInput!) {
+    createOneCharacter(data: $data) {
+      name
+    }
+  }
+`
+
 export const Hero: React.FC = (props) => {
+  const [createOneCharacter] = useMutation(CREATE_CHARACTER)
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
@@ -26,7 +34,21 @@ export const Hero: React.FC = (props) => {
   const [session, loading] = useSession()
   const { data, loading: queryLoading, refetch } = useQuery(exampleQuery, { notifyOnNetworkStatusChange: true })
 
-  const onSubmit = (data, e) => {
+  const onSubmit = (formData, e) => {
+    createOneCharacter({
+      variables: {
+        data: {
+          ...formData,
+          user: {
+            connect: {
+              id: session?.user?.name,
+              email: session?.user?.email,
+            },
+          },
+        },
+      },
+    })
+
     console.log('data', data)
     // e.target.reset(); // HTML standard reset() function will only reset inputs' value
   }
@@ -48,7 +70,6 @@ export const Hero: React.FC = (props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Create a Character</h2>
           <input name="name" ref={register} />
-          <input name="age" type="number" ref={register} />
           <input type="submit" />
         </form>
       </div>
