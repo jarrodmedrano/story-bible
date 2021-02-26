@@ -3,6 +3,8 @@ import { signIn, signOut, useSession } from 'next-auth/client'
 import { useQuery, gql } from '@apollo/client'
 import Image from 'next/image'
 import { Hero } from 'components/Hero/Hero'
+import { Router } from 'next'
+import LoginPage from '../login/index'
 
 export const exampleQuery = gql`
   query example {
@@ -12,7 +14,7 @@ export const exampleQuery = gql`
   }
 `
 
-const CreatePage = () => {
+const CharacterPage = () => {
   const [session, loading] = useSession()
   if (loading) {
     return (
@@ -27,17 +29,8 @@ const CreatePage = () => {
   if (session) {
     return <Hero />
   } else {
-    return (
-      <div className="flex justify-center mt-8 text-center">
-        <div className="flex-auto">
-          <div className="text-lg mb-2">You are not logged in!</div>
-          <button className="btn-green" onClick={() => signIn()}>
-            Sign in
-          </button>
-        </div>
-      </div>
-    )
+    return <LoginPage />
   }
 }
 
-export default CreatePage
+export default CharacterPage

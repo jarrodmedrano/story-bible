@@ -8,9 +8,10 @@ export const User = objectType({
     t.model.email()
     t.model.emailVerified()
     t.model.image()
-    t.model.characters()
+    t.model.stories()
     t.model.createdAt()
     t.model.updatedAt()
+    t.model.Series()
   },
 })
 

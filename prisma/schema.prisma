@@ -48,7 +48,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime? @map(name: "email_verified")
   image         String?
-  characters    Character[]
+  stories       Story[]
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
@@ -66,17 +66,49 @@ model VerificationRequest {
   @@map(name: "verification_requests")
 }
 
+model Story {
+  id            Int @default(autoincrement()) @id
+  user          User    @relation(fields: [userId], references: [id])
+  series        Series?    @relation(fields: [seriesId], references: [id])
+  seriesId      Int?
+  userId        Int
+  characters    Character[]
+  title         String
+  subTitle      String?
+  part          Int?
+  private       Boolean @default(false)
+  published     Boolean @default(false)
+  createdAt     DateTime @default(now()) @map(name: "created_at")
+  updatedAt     DateTime @default(now()) @map(name: "updated_at")
+
+  @@map(name: "stories")
+}
+
+model Series {
+  id            Int @default(autoincrement()) @id
+  user          User    @relation(fields: [userId], references: [id])
+  userId        Int
+  title         String
+  published     Boolean @default(false)
+  createdAt     DateTime @default(now()) @map(name: "created_at")
+  updatedAt     DateTime @default(now()) @map(name: "updated_at")
+
+  @@map(name: "characters")
+}
+
 model Character {
-  id        Int @default(autoincrement()) @id
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int
-  name      String?
-  bloodType String?
-  eyes      String?
-  height    String?
-  weight    String?
-  createdAt    DateTime @default(now()) @map(name: "created_at")
-  updatedAt    DateTime @default(now()) @map(name: "updated_at")
+  id            Int @default(autoincrement()) @id
+  story         Story    @relation(fields: [storyId], references: [id])
+  storyId       Int
+  name          String?
+  age           Int?
+  bloodType     String?
+  eyes          String?
+  height        String?
+  weight        String?
+  published     Boolean @default(false)
+  createdAt     DateTime @default(now()) @map(name: "created_at")
+  updatedAt     DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "characters")
 }

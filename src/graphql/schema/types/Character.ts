@@ -4,13 +4,15 @@ export const Character = objectType({
   name: 'Character',
   definition(t) {
     t.model.id()
-    t.model.user()
-    t.model.userId()
+    t.model.story()
+    t.model.storyId()
     t.model.name()
+    t.model.age()
     t.model.bloodType()
     t.model.eyes()
     t.model.height()
     t.model.weight()
+    t.model.published()
     t.model.createdAt()
     t.model.updatedAt()
   },

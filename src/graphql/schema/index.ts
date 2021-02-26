@@ -8,11 +8,17 @@ import { permissions } from '../permissions'
 import * as User from './types/User'
 import * as ExampleQuery from './types/ExampleQuery'
 import * as Character from './types/Character'
+import * as Story from './types/Story'
+import * as Series from './types/Series'
+
+import * as Account from './types/Account'
+import * as VerificationRequest from './types/VerificationRequest'
+import * as Session from './types/Session'
 
 export const GQLDate = asNexusMethod(GraphQLDate, 'date')
 
 export const baseSchema = makeSchema({
-  types: [User, Character, ExampleQuery, GQLDate],
+  types: [User, Series, Story, Character, ExampleQuery, GQLDate, Account, VerificationRequest, Session],
   plugins: [
     nexusSchemaPrisma({
       experimentalCRUD: true,

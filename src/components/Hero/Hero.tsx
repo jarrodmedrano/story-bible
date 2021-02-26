@@ -48,9 +48,6 @@ export const Hero: React.FC = (props) => {
         },
       },
     })
-
-    console.log('data', data)
-    // e.target.reset(); // HTML standard reset() function will only reset inputs' value
   }
 
   return (
