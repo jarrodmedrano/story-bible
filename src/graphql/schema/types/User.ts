@@ -11,7 +11,6 @@ export const User = objectType({
     t.model.stories()
     t.model.createdAt()
     t.model.updatedAt()
-    t.model.Series()
   },
 })
 

@@ -1,49 +1,26 @@
-import { makeSchema, asNexusMethod } from '@nexus/schema'
-import { nexusSchemaPrisma } from 'nexus-plugin-prisma/schema'
+import { makeSchema, asNexusMethod } from 'nexus'
+import { nexusPrisma } from 'nexus-plugin-prisma'
 import { GraphQLDate } from 'graphql-iso-date'
 import path from 'path'
 import { applyMiddleware } from 'graphql-middleware'
 import { permissions } from '../permissions'
 
-import * as User from './types/User'
-import * as ExampleQuery from './types/ExampleQuery'
-import * as Character from './types/Character'
-import * as Story from './types/Story'
-import * as Series from './types/Series'
-
-import * as Account from './types/Account'
-import * as VerificationRequest from './types/VerificationRequest'
-import * as Session from './types/Session'
+import * as types from './types'
 
 export const GQLDate = asNexusMethod(GraphQLDate, 'date')
 
 export const baseSchema = makeSchema({
-  types: [User, Series, Story, Character, ExampleQuery, GQLDate, Account, VerificationRequest, Session],
+  types: types,
   plugins: [
-    nexusSchemaPrisma({
+    nexusPrisma({
       experimentalCRUD: true,
-      outputs: {
-        typegen: path.join(process.cwd(), 'src/graphql/schema/nexus-prisma-typegen.ts'),
-      },
     }),
   ],
   outputs: {
     typegen: path.join(process.cwd(), 'src/graphql/schema/nexus-typegen.ts'),
     schema: path.join(process.cwd(), 'src/graphql/schema/schema.graphql'),
   },
-  typegenAutoConfig: {
-    contextType: 'Context.Context',
-    sources: [
-      {
-        source: '@prisma/client',
-        alias: 'prisma',
-      },
-      {
-        source: path.join(process.cwd(), 'src/graphql/context.ts'),
-        alias: 'Context',
-      },
-    ],
-  },
+  shouldGenerateArtifacts: process.env.NODE_ENV === 'development',
 })
 
 export const schema = applyMiddleware(baseSchema, permissions)
