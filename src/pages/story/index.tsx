@@ -46,39 +46,36 @@ const StoryPage = () => {
   }
 
   const onSubmit = async (formData, e) => {
-    console.log('f', prisma)
-
-    const newStory = await prisma.story.create({
-      data: {
-        title: formData?.title,
-        subTitle: formData?.subTitle,
-        part: Number(formData.part),
-        published: formData.published === 'checked' ? true : false,
-        author: {
-          connect: {
-            id: 1,
-            email: session?.user?.email,
-          },
-        },
-      },
-    })
-
-    // createOneStory({
-    //   variables: {
-    //     data: {
-    //       title: formData?.title,
-    //       subTitle: formData?.subTitle,
-    //       part: Number(formData.part),
-    //       published: formData.published === 'checked' ? true : false,
-    //       user: {
-    //         connect: {
-    //           id: session?.user?.name,
-    //           email: session?.user?.email,
-    //         },
+    // const newStory = await prisma.story.create({
+    //   data: {
+    //     title: formData?.title,
+    //     subTitle: formData?.subTitle,
+    //     part: Number(formData.part),
+    //     published: formData.published === 'checked' ? true : false,
+    //     author: {
+    //       connect: {
+    //         id: 1,
+    //         email: session?.user?.email,
     //       },
     //     },
     //   },
     // })
+
+    const newStory = await createOneStory({
+      variables: {
+        data: {
+          title: formData?.title,
+          subTitle: formData?.subTitle,
+          part: Number(formData.part),
+          published: formData.published === 'checked' ? true : false,
+          author: {
+            connect: {
+              id: 1,
+            },
+          },
+        },
+      },
+    })
   }
 
   if (session) {
