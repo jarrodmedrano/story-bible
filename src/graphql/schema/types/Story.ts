@@ -4,10 +4,9 @@ export const Story = objectType({
   name: 'Story',
   definition(t) {
     t.model.id()
-    t.model.user()
+    t.model.author()
     t.model.series()
-    t.model.seriesId()
-    t.model.userId()
+    t.model.authorId()
     t.model.characters()
     t.model.title()
     t.model.subTitle()
@@ -16,6 +15,7 @@ export const Story = objectType({
     t.model.published()
     t.model.createdAt()
     t.model.updatedAt()
+    t.model.seriesId()
   },
 })
 

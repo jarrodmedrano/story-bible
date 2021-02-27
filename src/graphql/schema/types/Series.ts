@@ -4,13 +4,11 @@ export const Series = objectType({
   name: 'Series',
   definition(t) {
     t.model.id()
-    t.model.user()
-    t.model.userId()
+    t.model.stories()
     t.model.title()
     t.model.published()
     t.model.createdAt()
     t.model.updatedAt()
-    t.model.Story()
   },
 })
 
