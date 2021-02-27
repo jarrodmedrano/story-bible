@@ -10,6 +10,7 @@ type RequiredMark = boolean | 'optional'
 import LoginPage from '../login/index'
 import { Controller, useForm } from 'react-hook-form'
 import { gql, useMutation } from '@apollo/client'
+import prisma from 'pages/api/prisma'
 
 const CREATE_STORY = gql`
   mutation storyMutation($data: StoryCreateInput!) {
@@ -45,39 +46,39 @@ const StoryPage = () => {
   }
 
   const onSubmit = async (formData, e) => {
-    console.log('f', formData)
+    console.log('f', prisma)
 
-    // const newStory = await prisma.story.create({
-    //   data: {
-    //     title: formData?.title,
-    //     subTitle: formData?.subTitle,
-    //     part: Number(formData.part),
-    //     published: formData.published === 'checked' ? true : false,
-    //     user: {
-    //       connect: {
-    //         id: session?.user?.name,
-    //         email: session?.user?.email,
-    //       },
-    //     },
-    //   },
-    // })
-
-    createOneStory({
-      variables: {
-        data: {
-          title: formData?.title,
-          subTitle: formData?.subTitle,
-          part: Number(formData.part),
-          published: formData.published === 'checked' ? true : false,
-          user: {
-            connect: {
-              id: session?.user?.name,
-              email: session?.user?.email,
-            },
+    const newStory = await prisma.story.create({
+      data: {
+        title: formData?.title,
+        subTitle: formData?.subTitle,
+        part: Number(formData.part),
+        published: formData.published === 'checked' ? true : false,
+        author: {
+          connect: {
+            id: 1,
+            email: session?.user?.email,
           },
         },
       },
     })
+
+    // createOneStory({
+    //   variables: {
+    //     data: {
+    //       title: formData?.title,
+    //       subTitle: formData?.subTitle,
+    //       part: Number(formData.part),
+    //       published: formData.published === 'checked' ? true : false,
+    //       user: {
+    //         connect: {
+    //           id: session?.user?.name,
+    //           email: session?.user?.email,
+    //         },
+    //       },
+    //     },
+    //   },
+    // })
   }
 
   if (session) {
