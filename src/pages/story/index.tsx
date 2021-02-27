@@ -70,7 +70,7 @@ const StoryPage = () => {
           published: formData.published === 'checked' ? true : false,
           author: {
             connect: {
-              id: 1,
+              id: session?.id,
             },
           },
         },
