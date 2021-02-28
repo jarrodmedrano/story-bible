@@ -12,6 +12,7 @@ const GET_STORIES = gql`
     stories(where: $data) {
       id
       title
+      subTitle
     }
   }
 `
@@ -35,13 +36,22 @@ const StoryPage = () => {
   if (session && data?.stories?.length > 0)
     return (
       <>
+        <h2>Your Stories</h2>
         <List itemLayout="horizontal" dataSource={data.stories}>
           {data?.stories?.map((story) => {
             return (
-              <List.Item key={story.title}>
+              <List.Item key={story.id}>
                 <List.Item.Meta
                   avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                  title={<Link href="/">{story.title}</Link>}
+                  title={
+                    <Link href={`/story/${story.id}`}>
+                      <p>
+                        {story.title}
+                        <br />
+                        {story.subTitle}
+                      </p>
+                    </Link>
+                  }
                 />
               </List.Item>
             )

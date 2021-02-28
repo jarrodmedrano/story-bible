@@ -113,8 +113,8 @@ const Create = () => {
           <Form.Item label="Series" tooltip="Is your story part of an epic trilogy?">
             <Controller disabled={isSubmitting} as={<Input />} name="series" control={control} defaultValue="" />
           </Form.Item>
-          <Form.Item label="Published?">
-            <Controller as={<Switch />} defaultValue="checked" name="published" control={control} />
+          <Form.Item label="Published?" valuePropName="checked">
+            <Controller as={<Switch />} defaultValue={true} defaultChecked={true} name="published" control={control} />
           </Form.Item>
           <Form.Item wrapperCol={{ span: 4, offset: 4 }}>
             <Button disabled={isSubmitting} type="primary" htmlType="submit">
