@@ -28,6 +28,7 @@ const UPLOAD_IMAGE = gql`
 `
 
 const Create = () => {
+  const [fileList, setFileList] = useState([])
   const [createOneStory] = useMutation(CREATE_STORY)
   const [successMessage, setSuccessMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -105,6 +106,7 @@ const Create = () => {
   const normFile = (e) => {
     setFile(e?.file)
   }
+  const handleChange = ({ fileList }) => setFileList(fileList)
 
   return session ? (
     <>
@@ -154,8 +156,13 @@ const Create = () => {
               control={control}
               name="thumbnail"
               render={() => (
-                <Upload accept="image/png, image/jpg, image/jpeg" customRequest={normFile} listType="picture">
-                  <Button icon={<UploadOutlined />}>Upload</Button>
+                <Upload
+                  onChange={handleChange}
+                  accept="image/png, image/jpg, image/jpeg"
+                  customRequest={normFile}
+                  listType="picture"
+                >
+                  {fileList.length >= 1 ? null : <Button icon={<UploadOutlined />}>Upload</Button>}
                 </Upload>
               )}
             />
