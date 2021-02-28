@@ -5,6 +5,7 @@ import { useQuery, gql } from '@apollo/client'
 import { Spin } from 'antd'
 import { Button } from 'antd'
 import Link from 'next/link'
+import { List, Avatar } from 'antd'
 
 const GET_STORIES = gql`
   query stories($data: StoryWhereInput!) {
@@ -34,11 +35,18 @@ const StoryPage = () => {
   if (session && data?.stories?.length > 0)
     return (
       <>
-        <ul>
+        <List itemLayout="horizontal" dataSource={data.stories}>
           {data?.stories?.map((story) => {
-            return <li key={story.id}>{story.title}</li>
+            return (
+              <List.Item key={story.title}>
+                <List.Item.Meta
+                  avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                  title={<Link href="/">{story.title}</Link>}
+                />
+              </List.Item>
+            )
           })}
-        </ul>
+        </List>
 
         {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
         <Link href="/story/create" passHref>
@@ -48,6 +56,10 @@ const StoryPage = () => {
         </Link>
       </>
     )
+
+  if (!session) {
+    return <LoginPage />
+  }
 }
 
 export default StoryPage

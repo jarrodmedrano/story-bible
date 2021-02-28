@@ -1,4 +1,5 @@
 import React from 'react'
+import { signIn, signOut, useSession } from 'next-auth/client'
 import { Provider } from 'next-auth/client'
 import { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client'

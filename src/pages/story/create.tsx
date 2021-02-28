@@ -7,6 +7,7 @@ type RequiredMark = boolean | 'optional'
 
 import { Controller, useForm } from 'react-hook-form'
 import { gql, useMutation } from '@apollo/client'
+import LoginPage from '../login/index'
 
 const CREATE_STORY = gql`
   mutation storyMutation($data: StoryCreateInput!) {
@@ -72,7 +73,7 @@ const Create = () => {
     setIsSubmitting(false)
   }
 
-  return (
+  return session ? (
     <>
       <h2>Create a New Story</h2>
       {successMessage ? (
@@ -128,6 +129,8 @@ const Create = () => {
         </Form>
       )}
     </>
+  ) : (
+    <LoginPage />
   )
 }
 

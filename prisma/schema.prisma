@@ -67,47 +67,50 @@ model VerificationRequest {
 }
 
 model Story {
-  id         Int         @id @default(autoincrement())
-  author     User        @relation(fields: [authorId], references: [id])
-  series     Series?     @relation(fields: [seriesId], references: [id])
-  authorId   Int
-  characters Character[]
-  title      String
-  subTitle   String?
-  part       Int?
-  private    Boolean     @default(false)
-  published  Boolean     @default(false)
-  createdAt  DateTime    @default(now()) @map(name: "created_at")
-  updatedAt  DateTime    @default(now()) @map(name: "updated_at")
+  id          Int         @id @default(autoincrement())
+  author      User        @relation(fields: [authorId], references: [id])
+  series      Series?     @relation(fields: [seriesId], references: [id])
+  authorId    Int
+  characters  Character[]
+  title       String
+  subTitle    String?
+  part        Int?
+  description String?
+  private     Boolean     @default(false)
+  published   Boolean     @default(false)
+  createdAt   DateTime    @default(now()) @map(name: "created_at")
+  updatedAt   DateTime    @default(now()) @map(name: "updated_at")
 
   seriesId Int?
   @@map(name: "stories")
 }
 
 model Series {
-  id        Int      @id @default(autoincrement())
-  stories   Story[]
-  title     String
-  published Boolean  @default(false)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  id          Int      @id @default(autoincrement())
+  stories     Story[]
+  title       String
+  description String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "series")
 }
 
 model Character {
-  id        Int      @id @default(autoincrement())
-  story     Story    @relation(fields: [storyId], references: [id])
-  storyId   Int
-  name      String?
-  age       Int?
-  bloodType String?
-  eyes      String?
-  height    String?
-  weight    String?
-  published Boolean  @default(false)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  id          Int      @id @default(autoincrement())
+  story       Story    @relation(fields: [storyId], references: [id])
+  storyId     Int
+  name        String?
+  age         Int?
+  bloodType   String?
+  eyes        String?
+  height      String?
+  weight      String?
+  description String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "characters")
 }
