@@ -13,6 +13,7 @@ const GET_STORIES = gql`
       id
       title
       subTitle
+      thumbnail
     }
   }
 `
@@ -42,7 +43,9 @@ const StoryPage = () => {
             return (
               <List.Item key={story.id}>
                 <List.Item.Meta
-                  avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                  avatar={
+                    <Avatar src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`} />
+                  }
                   title={
                     <Link href={`/story/${story.id}`}>
                       <p>

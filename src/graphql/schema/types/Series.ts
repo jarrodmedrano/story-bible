@@ -6,6 +6,7 @@ export const Series = objectType({
     t.model.id()
     t.model.stories()
     t.model.title()
+    t.model.description()
     t.model.published()
     t.model.createdAt()
     t.model.updatedAt()

@@ -74,7 +74,7 @@ const Create = () => {
       data.append('file', file)
       data.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET)
       const fileUploaded = await uploadDocumentsApi(data)
-      fileUrl = fileUploaded.url
+      fileUrl = fileUploaded.public_id
     } catch (err) {
       console.log('error', err)
     }
