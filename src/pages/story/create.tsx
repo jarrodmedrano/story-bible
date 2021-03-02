@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/client'
 import { Form, Input, Button, Switch, InputNumber, Upload } from 'antd'
 import Link from 'next/link'
@@ -10,6 +10,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { gql, useMutation } from '@apollo/client'
 import LoginPage from '../login/index'
 import { uploadDocumentsApi } from '../api/files/uploadFileApi'
+import Modal from 'antd/lib/modal/Modal'
 
 const CREATE_STORY = gql`
   mutation storyMutation($data: StoryCreateInput!) {
@@ -28,11 +29,13 @@ const UPLOAD_IMAGE = gql`
 `
 
 const Create = () => {
+  const [previewImage, setPreviewImage] = useState('')
+  const [previewVisible, setPreviewVisible] = useState(false)
   const [fileList, setFileList] = useState([])
+  const [file, setFile] = useState('')
   const [createOneStory] = useMutation(CREATE_STORY)
   const [successMessage, setSuccessMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [file, setFile] = useState()
   const { register, handleSubmit, control } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
@@ -44,6 +47,10 @@ const Create = () => {
   const onRequiredTypeChange = ({ requiredMark }: { requiredMark: RequiredMark }) => {
     setRequiredMarkType(requiredMark)
   }
+
+  useEffect(() => {
+    console.log('fle', file)
+  }, [file])
 
   const [session, loading] = useSession()
   if (loading) {
@@ -58,7 +65,6 @@ const Create = () => {
 
   const onSubmit = async (formData, e) => {
     setIsSubmitting(true)
-    console.log('the data', file)
 
     try {
       const data = new FormData()
@@ -66,47 +72,50 @@ const Create = () => {
       data.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET)
       const fileUploaded = await uploadDocumentsApi(data)
 
-      console.log('file', fileUploaded)
+      console.log('file uploaded', fileUploaded)
     } catch (err) {
       console.log('error', err)
     }
-    // try {
-    //   const newStory = await createOneStory({
-    //     variables: {
-    //       data: {
-    //         title: formData?.title,
-    //         subTitle: formData?.subTitle,
-    //         part: Number(formData.part),
-    //         published: formData.published === 'checked' ? true : false,
-    //         author: {
-    //           connect: {
-    //             id: session?.id,
-    //           },
-    //         },
-    //       },
-    //     },
-    //   })
+    try {
+      const newStory = await createOneStory({
+        variables: {
+          data: {
+            title: formData?.title,
+            subTitle: formData?.subTitle,
+            part: Number(formData.part),
+            published: formData.published === 'checked' ? true : false,
+            author: {
+              connect: {
+                id: session?.id,
+              },
+            },
+          },
+        },
+      })
 
-    //   setSuccessMessage(`${formData?.title} Successfully Submitted`)
+      setSuccessMessage(`${formData?.title} Successfully Submitted`)
 
-    //   console.log('newStory', newStory)
-    // } catch (err) {
-    //   console.log('err', err)
-    // }
+      console.log('newStory', newStory)
+    } catch (err) {
+      console.log('err', err)
+    }
 
     setIsSubmitting(false)
   }
 
-  const dummyRequest = ({ file, onSuccess }) => {
-    setTimeout(() => {
-      onSuccess('ok')
-    }, 0)
+  const handleCancel = () => setPreviewVisible(false)
+
+  const handlePreview = (file) => {
+    setPreviewImage(file.url || file.thumbUrl)
+    setPreviewVisible(true)
   }
 
-  const normFile = (e) => {
-    setFile(e?.file)
+  const handleData = (e) => setFile(e.file)
+
+  const handleChange = (e) => {
+    setFile(e.file)
+    setFileList(e.fileList)
   }
-  const handleChange = ({ fileList }) => setFileList(fileList)
 
   return session ? (
     <>
@@ -155,15 +164,22 @@ const Create = () => {
             <Controller
               control={control}
               name="thumbnail"
+              defaultValue=""
               render={() => (
-                <Upload
-                  onChange={handleChange}
-                  accept="image/png, image/jpg, image/jpeg"
-                  customRequest={normFile}
-                  listType="picture"
-                >
-                  {fileList.length >= 1 ? null : <Button icon={<UploadOutlined />}>Upload</Button>}
-                </Upload>
+                <>
+                  <Upload
+                    onChange={handleChange}
+                    data={handleData}
+                    accept="image/png, image/jpg, image/jpeg"
+                    onPreview={handlePreview}
+                    listType="picture"
+                  >
+                    {fileList.length >= 1 ? null : <Button icon={<UploadOutlined />}>Upload</Button>}
+                  </Upload>
+                  <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                  </Modal>
+                </>
               )}
             />
           </Form.Item>

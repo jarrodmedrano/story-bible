@@ -76,6 +76,7 @@ model Story {
   subTitle    String?
   part        Int?
   description String?
+  thumbnail   String?
   private     Boolean     @default(false)
   published   Boolean     @default(false)
   createdAt   DateTime    @default(now()) @map(name: "created_at")
