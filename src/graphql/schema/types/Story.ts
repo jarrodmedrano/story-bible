@@ -11,6 +11,8 @@ export const Story = objectType({
     t.model.title()
     t.model.subTitle()
     t.model.part()
+    t.model.description()
+    t.model.thumbnail()
     t.model.private()
     t.model.published()
     t.model.createdAt()

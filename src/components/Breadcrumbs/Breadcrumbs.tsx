@@ -34,17 +34,13 @@ const Breadcrumbs = () => {
   return (
     <nav aria-label="breadcrumbs">
       <Breadcrumb style={{ margin: '16px 0' }}>
-        <Breadcrumb.Item>
-          <Link href={`/`} passHref prefetch>
-            Home
-          </Link>
-        </Breadcrumb.Item>
+        <Link href={`/`} passHref prefetch>
+          <Breadcrumb.Item>Home</Breadcrumb.Item>
+        </Link>
         {breadcrumbs.map((breadcrumb, i) => {
           return (
             <Link key={breadcrumb.href} href={breadcrumb.href} passHref prefetch>
-              <Breadcrumb.Item>
-                <a>{convertBreadcrumb(breadcrumb.breadcrumb)}</a>
-              </Breadcrumb.Item>
+              <Breadcrumb.Item>{convertBreadcrumb(breadcrumb.breadcrumb)}</Breadcrumb.Item>
             </Link>
           )
         })}

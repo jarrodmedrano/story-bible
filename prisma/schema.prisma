@@ -76,6 +76,7 @@ model Story {
   subTitle    String?
   part        Int?
   description String?
+  thumbnail   String?
   private     Boolean     @default(false)
   published   Boolean     @default(false)
   createdAt   DateTime    @default(now()) @map(name: "created_at")
@@ -113,4 +114,11 @@ model Character {
   updatedAt   DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "characters")
+}
+
+model Image {
+  id       String @id @default(cuid())
+  publicId String @unique
+  format   String
+  version  String
 }

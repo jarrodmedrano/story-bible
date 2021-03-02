@@ -12,6 +12,7 @@ export const Character = objectType({
     t.model.eyes()
     t.model.height()
     t.model.weight()
+    t.model.description()
     t.model.published()
     t.model.createdAt()
     t.model.updatedAt()
