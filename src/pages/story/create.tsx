@@ -32,7 +32,7 @@ const Create = () => {
   const [previewImage, setPreviewImage] = useState('')
   const [previewVisible, setPreviewVisible] = useState(false)
   const [fileList, setFileList] = useState([])
-  const [file, setFile] = useState('')
+  const [file, setFile] = useState()
   const [createOneStory] = useMutation(CREATE_STORY)
   const [successMessage, setSuccessMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -66,18 +66,20 @@ const Create = () => {
   const onSubmit = async (formData, e) => {
     setIsSubmitting(true)
 
+    let fileUrl = ''
+
     try {
+      console.log('file', file)
       const data = new FormData()
       data.append('file', file)
       data.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET)
       const fileUploaded = await uploadDocumentsApi(data)
-
-      console.log('file uploaded', fileUploaded)
+      fileUrl = fileUploaded.url
     } catch (err) {
       console.log('error', err)
     }
     try {
-      const newStory = await createOneStory({
+      await createOneStory({
         variables: {
           data: {
             title: formData?.title,
@@ -89,13 +91,12 @@ const Create = () => {
                 id: session?.id,
               },
             },
+            thumbnail: fileUrl ? fileUrl : null,
           },
         },
       })
 
       setSuccessMessage(`${formData?.title} Successfully Submitted`)
-
-      console.log('newStory', newStory)
     } catch (err) {
       console.log('err', err)
     }
@@ -110,10 +111,12 @@ const Create = () => {
     setPreviewVisible(true)
   }
 
-  const handleData = (e) => setFile(e.file)
+  const handleData = (file) => {
+    setFile(file)
+    return file
+  }
 
   const handleChange = (e) => {
-    setFile(e.file)
     setFileList(e.fileList)
   }
 
@@ -168,8 +171,8 @@ const Create = () => {
               render={() => (
                 <>
                   <Upload
+                    beforeUpload={handleData}
                     onChange={handleChange}
-                    data={handleData}
                     accept="image/png, image/jpg, image/jpeg"
                     onPreview={handlePreview}
                     listType="picture"

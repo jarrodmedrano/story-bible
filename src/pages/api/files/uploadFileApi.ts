@@ -6,7 +6,7 @@ export interface IUploadDocumentsApi {
 
 export interface IUploadDocumentsApiResponse {
   success: boolean
-  data: any
+  url: string
   moved?: string
   errors: {
     code: string
