@@ -34,7 +34,7 @@ export const Hero: React.FC = () => {
   const [session] = useSession()
   const { data, loading: queryLoading, refetch } = useQuery(exampleQuery, { notifyOnNetworkStatusChange: true })
 
-  const onSubmit = (formData, e) => {
+  const onSubmit = (formData) => {
     createOneCharacter({
       variables: {
         data: {
