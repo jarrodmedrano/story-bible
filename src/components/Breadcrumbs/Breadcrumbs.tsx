@@ -37,7 +37,7 @@ const Breadcrumbs = () => {
         <Link href={`/`} passHref prefetch>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
         </Link>
-        {breadcrumbs.map((breadcrumb, i) => {
+        {breadcrumbs.map((breadcrumb) => {
           return (
             <Link key={breadcrumb.href} href={breadcrumb.href} passHref prefetch>
               <Breadcrumb.Item>{convertBreadcrumb(breadcrumb.breadcrumb)}</Breadcrumb.Item>
