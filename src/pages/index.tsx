@@ -1,9 +1,7 @@
 import React from 'react'
-import { signIn, signOut, useSession } from 'next-auth/client'
-import { useQuery, gql, useMutation } from '@apollo/client'
-import Image from 'next/image'
+import { useSession } from 'next-auth/client'
+import { gql } from '@apollo/client'
 import { Hero } from 'components/Hero/Hero'
-import Router from 'next/router'
 import LoginPage from './login/index'
 
 export const exampleQuery = gql`

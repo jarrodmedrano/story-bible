@@ -115,10 +115,3 @@ model Character {
 
   @@map(name: "characters")
 }
-
-model Image {
-  id       String @id @default(cuid())
-  publicId String @unique
-  format   String
-  version  String
-}

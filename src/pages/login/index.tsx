@@ -1,5 +1,5 @@
 import React from 'react'
-import { signIn, signOut, useSession } from 'next-auth/client'
+import { signIn } from 'next-auth/client'
 
 export default function LoginPage() {
   return (

@@ -5,7 +5,7 @@ import path from 'path'
 import { applyMiddleware } from 'graphql-middleware'
 import { permissions } from '../permissions'
 
-import * as types from './types'
+import * as types from '../'
 
 export const GQLDate = asNexusMethod(GraphQLDate, 'date')
 

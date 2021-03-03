@@ -20,14 +20,6 @@ const CREATE_STORY = gql`
   }
 `
 
-const UPLOAD_IMAGE = gql`
-  mutation UploadImage($input: ImageInput!) {
-    uploadImage(input: $input) {
-      id
-    }
-  }
-`
-
 const Create = () => {
   const [previewImage, setPreviewImage] = useState('')
   const [previewVisible, setPreviewVisible] = useState(false)
@@ -36,7 +28,7 @@ const Create = () => {
   const [createOneStory] = useMutation(CREATE_STORY)
   const [successMessage, setSuccessMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { register, handleSubmit, control } = useForm({
+  const { handleSubmit, control } = useForm({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     shouldFocusError: true,
@@ -63,7 +55,7 @@ const Create = () => {
     )
   }
 
-  const onSubmit = async (formData, e) => {
+  const onSubmit = async (formData) => {
     setIsSubmitting(true)
 
     let fileUrl = ''

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSession } from 'next-auth/client'
 import LoginPage from '../login/index'
 import { useQuery, gql } from '@apollo/client'
-import { List, Button, Card, Spin, Col, Row } from 'antd'
+import { Button, Card, Spin, Col, Row } from 'antd'
 const { Meta } = Card
 import Link from 'next/link'
 
