@@ -17,9 +17,9 @@ export const baseSchema = makeSchema({
     }),
   ],
   outputs: {
-    typegen: path.join(__dirname, '../node_modules/@types/nexus-typegen/index.d.ts'),
-    // typegen: path.join(process.cwd(), 'src/graphql/schema/nexus-typegen.ts'),
-    schema: path.join(process.cwd(), 'src/graphql/schema/schema.graphql'),
+    // typegen: path.join(__dirname, '../node_modules/@types/nexus-typegen/index.d.ts'),
+    typegen: path.join(__dirname, './nexus-typegen.ts'),
+    schema: path.join(__dirname, './schema.graphql'),
   },
   shouldGenerateArtifacts: process.env.NODE_ENV === 'development',
 })
