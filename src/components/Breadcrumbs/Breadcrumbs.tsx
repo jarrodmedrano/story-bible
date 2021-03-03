@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { Breadcrumb } from 'antd'
 
 const convertBreadcrumb = (string) => {
   return (
