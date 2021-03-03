@@ -19,7 +19,7 @@ const CREATE_CHARACTER = gql`
   }
 `
 
-export const Hero: React.FC = (props) => {
+export const Hero: React.FC = () => {
   const [createOneCharacter] = useMutation(CREATE_CHARACTER)
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
@@ -31,7 +31,7 @@ export const Hero: React.FC = (props) => {
     shouldFocusError: true,
     shouldUnregister: true,
   })
-  const [session, loading] = useSession()
+  const [session] = useSession()
   const { data, loading: queryLoading, refetch } = useQuery(exampleQuery, { notifyOnNetworkStatusChange: true })
 
   const onSubmit = (formData, e) => {
