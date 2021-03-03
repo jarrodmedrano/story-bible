@@ -2,10 +2,9 @@ import React from 'react'
 import { useSession } from 'next-auth/client'
 import LoginPage from '../login/index'
 import { useQuery, gql } from '@apollo/client'
-import { Spin } from 'antd'
-import { Button } from 'antd'
+import { List, Button, Card, Spin, Col, Row } from 'antd'
+const { Meta } = Card
 import Link from 'next/link'
-import { List, Avatar } from 'antd'
 
 const GET_STORIES = gql`
   query stories($data: StoryWhereInput!) {
@@ -38,28 +37,29 @@ const StoryPage = () => {
     return (
       <>
         <h2>Your Stories</h2>
-        <List itemLayout="horizontal" dataSource={data.stories}>
+        <Row gutter={16}>
           {data?.stories?.map((story) => {
             return (
-              <List.Item key={story.id}>
-                <List.Item.Meta
-                  avatar={
-                    <Avatar src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`} />
-                  }
-                  title={
-                    <Link href={`/story/${story.id}`}>
-                      <p>
-                        {story.title}
-                        <br />
-                        {story.subTitle}
-                      </p>
-                    </Link>
-                  }
-                />
-              </List.Item>
+              <Col span={8} key={story.id}>
+                <Link href={`/story/${story.id}`} passHref prefetch>
+                  <Card
+                    key={story.id}
+                    hoverable
+                    style={{ width: 240 }}
+                    cover={
+                      <img
+                        alt={story.title}
+                        src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
+                      />
+                    }
+                  >
+                    <Meta title={story.title} description={story.description} />
+                  </Card>
+                </Link>
+              </Col>
             )
           })}
-        </List>
+        </Row>
 
         {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
         <Link href="/story/create" passHref>

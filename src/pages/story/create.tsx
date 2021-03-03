@@ -139,7 +139,6 @@ const Create = () => {
           wrapperCol={{ span: 14 }}
           initialValues={{ requiredMark }}
           onValuesChange={onRequiredTypeChange}
-          requiredMark={requiredMark}
           onFinish={handleSubmit(onSubmit)}
         >
           <Form.Item
@@ -149,7 +148,14 @@ const Create = () => {
             hasFeedback
             rules={[{ required: true, message: 'Please enter your title!' }]}
           >
-            <Controller disabled={isSubmitting} as={<Input />} name="title" control={control} defaultValue="" />
+            <Controller
+              disabled={isSubmitting}
+              render={({ onChange, value }) => <Input onChange={onChange} value={value} />}
+              name="title"
+              control={control}
+              defaultValue=""
+              rules={{ required: true }}
+            />
           </Form.Item>
           <Form.Item label="Sub Title" tooltip="May I suggest Part Two: Electric Boogaloo">
             <Controller disabled={isSubmitting} as={<Input />} name="subTitle" control={control} defaultValue="" />
