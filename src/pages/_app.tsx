@@ -13,7 +13,6 @@ const { Header, Content, Footer } = Layout
 
 export default function App({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState)
-
   return (
     <Provider session={pageProps.session}>
       <ApolloProvider client={apolloClient}>

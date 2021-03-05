@@ -112,7 +112,7 @@ const Create = () => {
     setFileList(e.fileList)
   }
 
-  return session ? (
+  return (
     <>
       <h2>Create a New Story</h2>
       {successMessage ? (
@@ -197,8 +197,6 @@ const Create = () => {
         </Form>
       )}
     </>
-  ) : (
-    <LoginPage />
   )
 }
 

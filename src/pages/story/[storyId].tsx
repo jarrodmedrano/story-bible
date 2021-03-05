@@ -20,8 +20,8 @@ const GET_STORY = gql`
 const StoryPage = () => {
   const router = useRouter()
 
-  const [session, loading] = useSession()
-  const { loading: isLoading, error: storyError, data } = useQuery(GET_STORY, {
+  const [session] = useSession()
+  const { loading, error: storyError, data } = useQuery(GET_STORY, {
     variables: {
       data: {
         authorId: {
@@ -34,15 +34,11 @@ const StoryPage = () => {
     },
   })
 
-  if (isLoading || loading) return <Spin />
-
-  if (!session) {
-    return <LoginPage />
-  }
+  if (loading) return <Spin />
 
   if (storyError) return <p>Error </p>
 
-  if (session && data?.stories?.length > 0) {
+  if (data?.stories?.length > 0) {
     const story = data.stories[0]
 
     return (

@@ -5,6 +5,7 @@ import { useQuery, gql } from '@apollo/client'
 import { Button, Card, Spin, Col, Row } from 'antd'
 const { Meta } = Card
 import Link from 'next/link'
+import withWrapper from 'components/withWrapper/withWrapper'
 
 const GET_STORIES = gql`
   query stories($data: StoryWhereInput!) {
@@ -17,7 +18,7 @@ const GET_STORIES = gql`
   }
 `
 
-const StoryPage = () => {
+const StoryPage: React.FC = () => {
   const [session, loading] = useSession()
   const { loading: isLoading, error: storyError, data } = useQuery(GET_STORIES, {
     variables: {
@@ -33,33 +34,37 @@ const StoryPage = () => {
 
   if (storyError) return <p>Error ${storyError}</p>
 
-  if (session && data?.stories?.length > 0)
+  if (session)
     return (
       <>
-        <h2>Your Stories</h2>
-        <Row gutter={16}>
-          {data?.stories?.map((story) => {
-            return (
-              <Col span={8} key={story.id}>
-                <Link href={`/story/${story.id}`} passHref prefetch>
-                  <Card
-                    key={story.id}
-                    hoverable
-                    style={{ width: 240 }}
-                    cover={
-                      <img
-                        alt={story.title}
-                        src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
-                      />
-                    }
-                  >
-                    <Meta title={story.title} description={story.description} />
-                  </Card>
-                </Link>
-              </Col>
-            )
-          })}
-        </Row>
+        {data?.stories?.length > 0 && (
+          <>
+            <h2>Your Stories</h2>
+            <Row gutter={16}>
+              {data?.stories?.map((story) => {
+                return (
+                  <Col span={8} key={story.id}>
+                    <Link href={`/story/${story.id}`} passHref prefetch>
+                      <Card
+                        key={story.id}
+                        hoverable
+                        style={{ width: 240 }}
+                        cover={
+                          <img
+                            alt={story.title}
+                            src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
+                          />
+                        }
+                      >
+                        <Meta title={story.title} description={story.description} />
+                      </Card>
+                    </Link>
+                  </Col>
+                )
+              })}
+            </Row>
+          </>
+        )}
 
         {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
         <Link href="/story/create" passHref>
@@ -69,10 +74,6 @@ const StoryPage = () => {
         </Link>
       </>
     )
-
-  if (!session) {
-    return <LoginPage />
-  }
 }
 
-export default StoryPage
+export default withWrapper(StoryPage)
