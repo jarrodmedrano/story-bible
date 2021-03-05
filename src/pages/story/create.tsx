@@ -8,7 +8,6 @@ type RequiredMark = boolean | 'optional'
 
 import { Controller, useForm } from 'react-hook-form'
 import { gql, useMutation } from '@apollo/client'
-import LoginPage from '../login/index'
 import { uploadDocumentsApi } from '../api/files/uploadFileApi'
 import Modal from 'antd/lib/modal/Modal'
 
@@ -159,7 +158,10 @@ const Create = () => {
             <Controller disabled={isSubmitting} as={<Input />} name="series" control={control} defaultValue="" />
           </Form.Item>
           <Form.Item label="Published?" valuePropName="checked">
-            <Controller as={<Switch />} defaultValue={true} defaultChecked={true} name="published" control={control} />
+            <Controller as={<Switch />} control={control} defaultChecked={true} defaultValue={true} name="published" />
+          </Form.Item>
+          <Form.Item label="Description">
+            <Controller as={<Input.TextArea />} control={control} name="description" />
           </Form.Item>
           <Form.Item label="Thumbnail">
             <Controller
@@ -169,11 +171,11 @@ const Create = () => {
               render={() => (
                 <>
                   <Upload
-                    beforeUpload={handleData}
-                    onChange={handleChange}
                     accept="image/png, image/jpg, image/jpeg"
-                    onPreview={handlePreview}
+                    beforeUpload={handleData}
                     listType="picture"
+                    onChange={handleChange}
+                    onPreview={handlePreview}
                   >
                     {fileList.length >= 1 ? null : <Button icon={<UploadOutlined />}>Upload</Button>}
                   </Upload>
