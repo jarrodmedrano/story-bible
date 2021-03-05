@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSession } from 'next-auth/client'
-import LoginPage from '../login/index'
 import { useQuery, gql } from '@apollo/client'
 import { Button, Card, Spin, Col, Row } from 'antd'
 const { Meta } = Card
