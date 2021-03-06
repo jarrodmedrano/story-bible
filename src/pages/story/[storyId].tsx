@@ -1,10 +1,11 @@
 import React from 'react'
 import { useSession } from 'next-auth/client'
 import { useQuery, gql } from '@apollo/client'
-import { Spin } from 'antd'
+import { Card, Spin } from 'antd'
 import { Button } from 'antd'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { Meta } from 'antd/lib/list/Item'
 
 const GET_STORY = gql`
   query stories($data: StoryWhereInput!) {
@@ -12,11 +13,15 @@ const GET_STORY = gql`
       id
       title
       subTitle
+      thumbnail
+      description
+      part
+      published
     }
   }
 `
 
-const StoryPage = () => {
+const EditPage = () => {
   const router = useRouter()
 
   const [session] = useSession()
@@ -45,9 +50,29 @@ const StoryPage = () => {
         {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
         <h1>{story.title}</h1>
         <h2>{story.subTitle}</h2>
+
+        <Card
+          key={story.id}
+          hoverable
+          style={{ width: 240 }}
+          cover={
+            <img
+              alt={story.title}
+              src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story?.thumbnail}`}
+            />
+          }
+        >
+          <Meta title={story.title} description={story.description} />
+        </Card>
         <Link href="/story/create" passHref>
           <Button type="primary" htmlType="button">
             Create New
+          </Button>
+        </Link>
+
+        <Link href={`/story/edit/${story.id}`} passHref>
+          <Button type="default" htmlType="button">
+            Edit Story
           </Button>
         </Link>
       </>
@@ -55,4 +80,4 @@ const StoryPage = () => {
   }
 }
 
-export default StoryPage
+export default EditPage

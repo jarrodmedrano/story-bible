@@ -13,6 +13,8 @@ const GET_STORIES = gql`
       title
       subTitle
       thumbnail
+      description
+      part
     }
   }
 `
@@ -31,48 +33,47 @@ const StoryPage: React.FC = () => {
 
   if (isLoading || loading) return <Spin />
 
-  if (storyError) return <p>Error ${storyError}</p>
+  if (storyError) return <p>Error Fetching Stories</p>
 
-  if (session)
-    return (
-      <>
-        {data?.stories?.length > 0 && (
-          <>
-            <h2>Your Stories</h2>
-            <Row gutter={16}>
-              {data?.stories?.map((story) => {
-                return (
-                  <Col span={8} key={story.id}>
-                    <Link href={`/story/${story.id}`} passHref prefetch>
-                      <Card
-                        key={story.id}
-                        hoverable
-                        style={{ width: 240 }}
-                        cover={
-                          <img
-                            alt={story.title}
-                            src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
-                          />
-                        }
-                      >
-                        <Meta title={story.title} description={story.description} />
-                      </Card>
-                    </Link>
-                  </Col>
-                )
-              })}
-            </Row>
-          </>
-        )}
+  return (
+    <>
+      {data?.stories?.length > 0 && (
+        <>
+          <h2>Your Stories</h2>
+          <Row gutter={16}>
+            {data?.stories?.map((story) => {
+              return (
+                <Col span={8} key={story.id}>
+                  <Link href={`/story/${story.id}`} passHref prefetch>
+                    <Card
+                      key={story.id}
+                      hoverable
+                      style={{ width: 240 }}
+                      cover={
+                        <img
+                          alt={story.title}
+                          src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
+                        />
+                      }
+                    >
+                      <Meta title={story.title} description={story.description} />
+                    </Card>
+                  </Link>
+                </Col>
+              )
+            })}
+          </Row>
+        </>
+      )}
 
-        {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
-        <Link href="/story/create" passHref>
-          <Button type="primary" htmlType="button">
-            Create New
-          </Button>
-        </Link>
-      </>
-    )
+      {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
+      <Link href="/story/create" passHref>
+        <Button type="primary" htmlType="button">
+          Create New
+        </Button>
+      </Link>
+    </>
+  )
 }
 
 export default withWrapper(StoryPage)

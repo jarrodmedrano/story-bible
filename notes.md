@@ -20,3 +20,6 @@ npx prisma studio opens studio
 http://localhost:3000/api/graphql
 
 http://localhost:5555
+
+change db in env to live site
+npx prisma migrate resolve --applied "{filenamegoeshere}" --preview-feature
