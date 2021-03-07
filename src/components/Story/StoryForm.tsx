@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSession } from 'next-auth/client'
 import { Form, Input, Button, Switch, InputNumber, Upload } from 'antd'
 import Link from 'next/link'
@@ -173,10 +173,6 @@ const StoryForm = (props) => {
 
   const handleChange = (e) => {
     setFileList(e.fileList)
-  }
-
-  const buttonLayout = {
-    wrapperCol: { span: 14, offset: 16 },
   }
 
   return (
