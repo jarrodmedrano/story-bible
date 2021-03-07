@@ -10,6 +10,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { gql, useMutation } from '@apollo/client'
 import { uploadDocumentsApi } from '../../pages/api/files/uploadFileApi'
 import Modal from 'antd/lib/modal/Modal'
+import removeEmpty from '../../util/removeEmpty'
 
 const CREATE_STORY = gql`
   mutation storyMutation($data: StoryCreateInput!) {
@@ -27,6 +28,14 @@ const UPDATE_STORY = gql`
   }
 `
 
+const DELETE_STORY = gql`
+  mutation storyMutation($where: StoryWhereUniqueInput!) {
+    deleteOneStory(where: $where) {
+      title
+    }
+  }
+`
+
 const StoryForm = (props) => {
   const { formType, storyToEdit } = props
   const [previewImage, setPreviewImage] = useState('')
@@ -34,6 +43,7 @@ const StoryForm = (props) => {
   const [fileList, setFileList] = useState([])
   const [file, setFile] = useState()
   const [updateOneStory] = useMutation(UPDATE_STORY)
+  const [deleteOneStory] = useMutation(DELETE_STORY)
   const [createOneStory] = useMutation(CREATE_STORY)
   const [successMessage, setSuccessMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -60,6 +70,22 @@ const StoryForm = (props) => {
     )
   }
 
+  const onDelete = async () => {
+    try {
+      await deleteOneStory({
+        variables: {
+          where: {
+            id: storyToEdit.id,
+          },
+        },
+      })
+
+      setSuccessMessage(`${storyToEdit?.title} Successfully Deleted`)
+    } catch (err) {
+      console.log('err', err)
+    }
+  }
+
   const onSubmit = async (formData) => {
     setIsSubmitting(true)
 
@@ -67,6 +93,7 @@ const StoryForm = (props) => {
     if (file) {
       try {
         const data = new FormData()
+        data.append('file', file)
         data.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET)
         const fileUploaded = await uploadDocumentsApi(data)
         fileUrl = fileUploaded.public_id
@@ -86,18 +113,22 @@ const StoryForm = (props) => {
           id: session?.id,
         },
       },
-      series: {
-        title: formData?.series,
-      },
-      thumbnail: fileUrl ? fileUrl : null,
+      // series: {
+      //   connect: {
+      //     title: formData?.series,
+      //   },
+      // },
+      thumbnail: fileUrl ? fileUrl : '',
     }
+
+    const cleanData = removeEmpty(newData)
 
     if (!storyToEdit) {
       try {
         await createOneStory({
           variables: {
             data: {
-              ...newData,
+              ...cleanData,
             },
           },
         })
@@ -111,7 +142,7 @@ const StoryForm = (props) => {
         await updateOneStory({
           variables: {
             data: {
-              ...newData,
+              ...cleanData,
             },
             where: {
               id: storyToEdit?.id,
@@ -142,6 +173,10 @@ const StoryForm = (props) => {
 
   const handleChange = (e) => {
     setFileList(e.fileList)
+  }
+
+  const buttonLayout = {
+    wrapperCol: { span: 14, offset: 16 },
   }
 
   return (
@@ -254,12 +289,19 @@ const StoryForm = (props) => {
             <Button disabled={isSubmitting} type="primary" htmlType="submit">
               Submit
             </Button>
-            <Link href="/story" passHref>
+            <Link href="/stories" passHref>
               <Button type="dashed" htmlType="button">
                 Cancel
               </Button>
             </Link>
           </Form.Item>
+          {storyToEdit && (
+            <Form.Item wrapperCol={{ span: 4, offset: 4 }}>
+              <Button onClick={onDelete} type="dashed" htmlType="button">
+                Delete
+              </Button>
+            </Form.Item>
+          )}
         </Form>
       )}
     </>

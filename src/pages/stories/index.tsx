@@ -44,7 +44,7 @@ const StoryPage: React.FC = () => {
             {data?.stories?.map((story) => {
               return (
                 <Col span={8} key={story.id}>
-                  <Link href={`/story/${story.id}`} passHref prefetch>
+                  <Link href={`/stories/${story.id}`} passHref prefetch>
                     <Card
                       key={story.id}
                       hoverable
@@ -67,7 +67,7 @@ const StoryPage: React.FC = () => {
       )}
 
       {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
-      <Link href="/story/create" passHref>
+      <Link href="/stories/create" passHref>
         <Button type="primary" htmlType="button">
           Create New
         </Button>

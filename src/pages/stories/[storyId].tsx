@@ -64,13 +64,13 @@ const EditPage = () => {
         >
           <Meta title={story.title} description={story.description} />
         </Card>
-        <Link href="/story/create" passHref>
+        <Link href="/stories/create" passHref>
           <Button type="primary" htmlType="button">
             Create New
           </Button>
         </Link>
 
-        <Link href={`/story/edit/${story.id}`} passHref>
+        <Link href={`/stories/edit/${story.id}`} passHref>
           <Button type="default" htmlType="button">
             Edit Story
           </Button>

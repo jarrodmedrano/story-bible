@@ -27,12 +27,12 @@ export default function App({ Component, pageProps }: AppProps) {
               </Menu.Item>
               <SubMenu key="SubMenu" title="Story">
                 <Menu.Item key="setting:1">
-                  <Link href="/story" passHref>
+                  <Link href="/stories" passHref>
                     List
                   </Link>
                 </Menu.Item>
                 <Menu.Item key="setting:2">
-                  <Link href="/story/create" passHref>
+                  <Link href="/stories/create" passHref>
                     Create
                   </Link>
                 </Menu.Item>
