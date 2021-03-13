@@ -44,20 +44,22 @@ const StoryPage: React.FC = () => {
             {data?.stories?.map((story) => {
               return (
                 <Col span={8} key={story.id}>
-                  <Link href={`/stories/${story.id}`} passHref prefetch>
-                    <Card
-                      key={story.id}
-                      hoverable
-                      style={{ width: 240 }}
-                      cover={
-                        <img
-                          alt={story.title}
-                          src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
-                        />
-                      }
-                    >
-                      <Meta title={story.title} description={story.description} />
-                    </Card>
+                  <Link href={`/stories/${story.id}`}>
+                    <div>
+                      <Card
+                        key={story.id}
+                        hoverable
+                        style={{ width: 240 }}
+                        cover={
+                          <img
+                            alt={story.title}
+                            src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/storyBible/${story.thumbnail}.jpg`}
+                          />
+                        }
+                      >
+                        <Meta title={story.title} description={story.description} />
+                      </Card>
+                    </div>
                   </Link>
                 </Col>
               )

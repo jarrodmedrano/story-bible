@@ -135,7 +135,7 @@ const StoryForm = (props) => {
           id: session?.id,
         },
       },
-      thumbnail: fileUrl ? fileUrl : '',
+      thumbnail: fileUrl,
     }
 
     const cleanData = removeEmpty(newData)
@@ -168,6 +168,8 @@ const StoryForm = (props) => {
         console.log('err', err)
       }
     } else {
+      console.log('data cleaned', cleanData)
+
       try {
         const cleanSeries = removeEmpty({
           series: {
@@ -305,7 +307,15 @@ const StoryForm = (props) => {
           <Form.Item label="Thumbnail">
             <Controller
               control={control}
-              defaultValue=""
+              defaultValue={[
+                {
+                  uid: '1',
+                  name: 'xxx.png',
+                  status: 'done',
+                  response: 'Server Error 500', // custom error message to show
+                  url: 'http://www.baidu.com/xxx.png',
+                },
+              ]}
               name="thumbnail"
               render={() => (
                 <>
