@@ -78,8 +78,6 @@ const StoryForm = (props) => {
     },
   })
 
-  console.log('error', data)
-
   if (loading || isLoading) {
     return (
       <div className="flex justify-center mt-8 text-center">
@@ -135,25 +133,28 @@ const StoryForm = (props) => {
           id: session?.id,
         },
       },
-      thumbnail: fileUrl,
+      thumbnail: fileUrl ? fileUrl : storyToEdit?.thumbnail,
     }
 
     const cleanData = removeEmpty(newData)
 
     if (!storyToEdit) {
       try {
-        const cleanSeries = removeEmpty({
-          series: {
-            create: {
-              author: {
-                connect: {
-                  id: session?.id,
+        const cleanSeries = formData?.series
+          ? removeEmpty({
+              series: {
+                create: {
+                  author: {
+                    connect: {
+                      id: session?.id,
+                    },
+                  },
+                  title: formData?.series,
                 },
               },
-              title: formData?.series,
-            },
-          },
-        })
+            })
+          : null
+
         await createOneStory({
           variables: {
             data: {
@@ -168,21 +169,21 @@ const StoryForm = (props) => {
         console.log('err', err)
       }
     } else {
-      console.log('data cleaned', cleanData)
-
       try {
-        const cleanSeries = removeEmpty({
-          series: {
-            create: {
-              author: {
-                connect: {
-                  id: session?.id,
+        const cleanSeries = formData?.series
+          ? removeEmpty({
+              series: {
+                update: {
+                  author: {
+                    connect: {
+                      id: session?.id,
+                    },
+                  },
+                  title: formData?.series,
                 },
               },
-              title: formData?.series,
-            },
-          },
-        })
+            })
+          : null
 
         await updateOneStory({
           variables: {
@@ -208,7 +209,11 @@ const StoryForm = (props) => {
   const handleCancel = () => setPreviewVisible(false)
 
   const handlePreview = (file) => {
-    setPreviewImage(file.url || file.thumbUrl)
+    setPreviewImage(
+      file.url || file.thumbUrl || storyToEdit.thumbnail
+        ? `https://res.cloudinary.com/slashclick/image/upload/v1614654910/${storyToEdit.thumbnail}`
+        : null,
+    )
     setPreviewVisible(true)
   }
 
@@ -307,15 +312,6 @@ const StoryForm = (props) => {
           <Form.Item label="Thumbnail">
             <Controller
               control={control}
-              defaultValue={[
-                {
-                  uid: '1',
-                  name: 'xxx.png',
-                  status: 'done',
-                  response: 'Server Error 500', // custom error message to show
-                  url: 'http://www.baidu.com/xxx.png',
-                },
-              ]}
               name="thumbnail"
               render={() => (
                 <>
@@ -325,6 +321,18 @@ const StoryForm = (props) => {
                     listType="picture"
                     onChange={handleChange}
                     onPreview={handlePreview}
+                    defaultFileList={
+                      storyToEdit?.thumbnail && [
+                        {
+                          uid: '1',
+                          name: storyToEdit?.thumbnail,
+                          status: 'done',
+                          size: 0,
+                          type: '.jpg',
+                          url: `https://res.cloudinary.com/slashclick/image/upload/v1614654910/storyBible/${storyToEdit?.thumbnail}.jpg`,
+                        },
+                      ]
+                    }
                   >
                     {fileList.length >= 1 ? null : <Button icon={<UploadOutlined />}>Upload</Button>}
                   </Upload>

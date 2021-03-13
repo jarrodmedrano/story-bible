@@ -56,10 +56,12 @@ const EditPage = () => {
           hoverable
           style={{ width: 240 }}
           cover={
-            <img
-              alt={story.title}
-              src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story?.thumbnail}`}
-            />
+            story.thumbnail ? (
+              <img
+                alt={story.title}
+                src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story?.thumbnail}`}
+              />
+            ) : null
           }
         >
           <Meta title={story.title} description={story.description} />

@@ -39,8 +39,6 @@ const Edit = () => {
     },
   })
 
-  console.log('the story', data)
-
   if (loading) return <Spin />
 
   if (storyError) return <p>Error </p>

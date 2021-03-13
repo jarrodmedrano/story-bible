@@ -51,13 +51,15 @@ const StoryPage: React.FC = () => {
                         hoverable
                         style={{ width: 240 }}
                         cover={
-                          <img
-                            alt={story.title}
-                            src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/storyBible/${story.thumbnail}.jpg`}
-                          />
+                          story.thumbnail ? (
+                            <img
+                              alt={story.title}
+                              src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
+                            />
+                          ) : null
                         }
                       >
-                        <Meta title={story.title} description={story.description} />
+                        <Meta title={`${story.title} ${story.subTitle}`} description={story.description} />
                       </Card>
                     </div>
                   </Link>
