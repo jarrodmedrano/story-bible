@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { useSession } from 'next-auth/client'
-import { Form, Input, Button, Switch, InputNumber, Upload } from 'antd'
+import { Form, Input, Button, Switch, InputNumber, Upload, Spin } from 'antd'
 import Link from 'next/link'
 import { UploadOutlined } from '@ant-design/icons'
 
 type RequiredMark = boolean | 'optional'
 
 import { Controller, useForm } from 'react-hook-form'
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { uploadDocumentsApi } from '../../pages/api/files/uploadFileApi'
 import Modal from 'antd/lib/modal/Modal'
 import removeEmpty from '../../util/removeEmpty'
@@ -35,6 +35,14 @@ const DELETE_STORY = gql`
     }
   }
 `
+const GET_SERIES = gql`
+  query series($where: SeriesWhereInput!) {
+    series(where: $where) {
+      id
+      title
+    }
+  }
+`
 
 const StoryForm = (props) => {
   const { formType, storyToEdit } = props
@@ -58,13 +66,27 @@ const StoryForm = (props) => {
   const onRequiredTypeChange = ({ requiredMark }: { requiredMark: RequiredMark }) => {
     setRequiredMarkType(requiredMark)
   }
-
   const [session, loading] = useSession()
-  if (loading) {
+
+  const { loading: isLoading, error: seriesError, data } = useQuery(GET_SERIES, {
+    variables: {
+      where: {
+        authorId: {
+          equals: session?.id,
+        },
+      },
+    },
+  })
+
+  console.log('error', data)
+
+  if (loading || isLoading) {
     return (
       <div className="flex justify-center mt-8 text-center">
         <div className="flex-auto">
-          <div className="text-lg mb-2">Loading...</div>
+          <div className="text-lg mb-2">
+            <Spin />
+          </div>
         </div>
       </div>
     )
@@ -113,11 +135,6 @@ const StoryForm = (props) => {
           id: session?.id,
         },
       },
-      // series: {
-      //   connect: {
-      //     title: formData?.series,
-      //   },
-      // },
       thumbnail: fileUrl ? fileUrl : '',
     }
 
@@ -125,10 +142,23 @@ const StoryForm = (props) => {
 
     if (!storyToEdit) {
       try {
+        const cleanSeries = removeEmpty({
+          series: {
+            create: {
+              author: {
+                connect: {
+                  id: session?.id,
+                },
+              },
+              title: formData?.series,
+            },
+          },
+        })
         await createOneStory({
           variables: {
             data: {
               ...cleanData,
+              ...cleanSeries,
             },
           },
         })
@@ -139,10 +169,24 @@ const StoryForm = (props) => {
       }
     } else {
       try {
+        const cleanSeries = removeEmpty({
+          series: {
+            create: {
+              author: {
+                connect: {
+                  id: session?.id,
+                },
+              },
+              title: formData?.series,
+            },
+          },
+        })
+
         await updateOneStory({
           variables: {
             data: {
               ...cleanData,
+              ...cleanSeries,
             },
             where: {
               id: storyToEdit?.id,

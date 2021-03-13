@@ -49,6 +49,7 @@ model User {
   emailVerified DateTime? @map(name: "email_verified")
   image         String?
   stories       Story[]
+  series        Series[]
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
@@ -88,6 +89,8 @@ model Story {
 
 model Series {
   id          Int      @id @default(autoincrement())
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
   stories     Story[]
   title       String
   description String?

@@ -4,6 +4,8 @@ export const Series = objectType({
   name: 'Series',
   definition(t) {
     t.model.id()
+    t.model.author()
+    t.model.authorId()
     t.model.stories()
     t.model.title()
     t.model.description()
