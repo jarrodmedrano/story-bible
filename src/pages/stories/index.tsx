@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSession } from 'next-auth/client'
 import { useQuery, gql } from '@apollo/client'
-import { Button, Card, Spin, Col, Row } from 'antd'
+import { Button, Card, Spin, Col, Row, Space } from 'antd'
 const { Meta } = Card
 import Link from 'next/link'
 import withWrapper from 'components/withWrapper/withWrapper'
@@ -39,43 +39,52 @@ const StoryPage: React.FC = () => {
     <>
       {data?.stories?.length > 0 && (
         <>
-          <h2>Your Stories</h2>
-          <Row gutter={16}>
-            {data?.stories?.map((story) => {
-              return (
-                <Col span={8} key={story.id}>
-                  <Link href={`/stories/${story.id}`}>
-                    <div>
-                      <Card
-                        key={story.id}
-                        hoverable
-                        style={{ width: 240 }}
-                        cover={
-                          story.thumbnail ? (
-                            <img
-                              alt={story.title}
-                              src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
-                            />
-                          ) : null
-                        }
-                      >
-                        <Meta title={story.title} description={story.subTitle} />
-                      </Card>
-                    </div>
-                  </Link>
-                </Col>
-              )
-            })}
+          <Row gutter={[16, 16]}>
+            <Col span={4} className="gutter-row">
+              <h2>Your Stories</h2>
+              <Space direction="vertical">
+                {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
+                <Link href="/stories/create" passHref>
+                  <Button type="primary" htmlType="button">
+                    Create New
+                  </Button>
+                </Link>
+              </Space>
+            </Col>
+            <Col span={14} push={1} className="gutter-row"></Col>
+          </Row>
+
+          <Row gutter={[16, 16]}>
+            <Col span={18} className="gutter-row">
+              {data?.stories?.map((story) => {
+                return (
+                  <Space direction="vertical" key={story.id}>
+                    <Link href={`/stories/${story.id}`}>
+                      <div>
+                        <Card
+                          key={story.id}
+                          hoverable
+                          style={{ width: 240 }}
+                          cover={
+                            story.thumbnail ? (
+                              <img
+                                alt={story.title}
+                                src={`https://res.cloudinary.com/slashclick/image/upload/v1614654910/${story.thumbnail}`}
+                              />
+                            ) : null
+                          }
+                        >
+                          <Meta title={story.title} description={story.subTitle} />
+                        </Card>
+                      </div>
+                    </Link>
+                  </Space>
+                )
+              })}
+            </Col>
           </Row>
         </>
       )}
-
-      {!data.stories.length && <p>You don&apos;t have any Stories yet!</p>}
-      <Link href="/stories/create" passHref>
-        <Button type="primary" htmlType="button">
-          Create New
-        </Button>
-      </Link>
     </>
   )
 }
