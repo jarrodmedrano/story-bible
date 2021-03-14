@@ -161,10 +161,19 @@ const StoryForm = (props) => {
     }
 
     const cleanData = removeEmpty(newData)
+    const foundSeries = dropdownList.find((item) => item.title === formData?.series)
 
     if (!storyToEdit) {
       try {
-        const cleanSeries = formData?.series
+        const cleanSeries = foundSeries
+          ? removeEmpty({
+              series: {
+                connect: {
+                  id: foundSeries?.series,
+                },
+              },
+            })
+          : formData?.series
           ? removeEmpty({
               series: {
                 create: {
@@ -194,7 +203,15 @@ const StoryForm = (props) => {
       }
     } else {
       try {
-        const cleanSeries = formData?.series
+        const cleanSeries = foundSeries
+          ? removeEmpty({
+              series: {
+                connect: {
+                  id: foundSeries?.series,
+                },
+              },
+            })
+          : formData?.series
           ? removeEmpty({
               series: {
                 update: {
