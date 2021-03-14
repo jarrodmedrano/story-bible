@@ -59,7 +59,7 @@ const StoryPage: React.FC = () => {
                           ) : null
                         }
                       >
-                        <Meta title={`${story.title} ${story.subTitle}`} description={story.description} />
+                        <Meta title={story.title} description={story.subTitle} />
                       </Card>
                     </div>
                   </Link>

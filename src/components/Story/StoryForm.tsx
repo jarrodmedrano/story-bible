@@ -337,9 +337,9 @@ const StoryForm = (props) => {
                   >
                     {dropdownList.map((seriesItem) => {
                       return (
-                        <Option key={seriesItem.title} value={seriesItem.title}>
+                        <Select.Option key={seriesItem.title} value={seriesItem.title}>
                           {seriesItem.title}
-                        </Option>
+                        </Select.Option>
                       )
                     })}
                   </Select>
@@ -365,6 +365,7 @@ const StoryForm = (props) => {
             <Controller
               as={<Switch />}
               control={control}
+              defaultValue={storyToEdit?.published || true}
               defaultChecked={storyToEdit?.published || true}
               name="published"
             />
@@ -381,6 +382,7 @@ const StoryForm = (props) => {
             <Controller
               control={control}
               name="thumbnail"
+              defaultValue={storyToEdit?.thumbnail}
               render={() => (
                 <>
                   <Upload

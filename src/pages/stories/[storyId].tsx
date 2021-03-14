@@ -64,7 +64,7 @@ const EditPage = () => {
             ) : null
           }
         >
-          <Meta title={story.title} description={story.description} />
+          <Meta title={story.title} description={story.subTitle} />
         </Card>
         <Link href="/stories/create" passHref>
           <Button type="primary" htmlType="button">
