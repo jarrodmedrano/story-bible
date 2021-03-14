@@ -92,7 +92,7 @@ model Series {
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
   stories     Story[]
-  title       String
+  title       String   @unique
   description String?
   published   Boolean  @default(false)
   createdAt   DateTime @default(now()) @map(name: "created_at")

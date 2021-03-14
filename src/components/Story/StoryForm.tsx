@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSession } from 'next-auth/client'
-import { Form, Input, Button, Switch, InputNumber, Upload, Spin } from 'antd'
+import { Form, Input, Button, Switch, InputNumber, Upload, Spin, Select } from 'antd'
 import Link from 'next/link'
 import { UploadOutlined } from '@ant-design/icons'
 
@@ -11,6 +11,7 @@ import { gql, useMutation, useQuery } from '@apollo/client'
 import { uploadDocumentsApi } from '../../pages/api/files/uploadFileApi'
 import Modal from 'antd/lib/modal/Modal'
 import removeEmpty from '../../util/removeEmpty'
+import { Option } from 'antd/lib/mentions'
 
 const CREATE_STORY = gql`
   mutation storyMutation($data: StoryCreateInput!) {
@@ -68,7 +69,7 @@ const StoryForm = (props) => {
   }
   const [session, loading] = useSession()
 
-  const { loading: isLoading, error: seriesError, data } = useQuery(GET_SERIES, {
+  const { loading: isLoading, error: seriesError, data: seriesData } = useQuery(GET_SERIES, {
     variables: {
       where: {
         authorId: {
@@ -284,7 +285,21 @@ const StoryForm = (props) => {
               control={control}
             />
           </Form.Item>
-          <Form.Item label="Series" tooltip="Is your story part of an epic trilogy?">
+          {seriesData.series && (
+            <Form.Item label="Select Series" tooltip="Is your story part of an epic trilogy?">
+              <Select defaultValue={storyToEdit?.series?.title} onChange={handleChange}>
+                {seriesData.series.map((seriesItem) => {
+                  return (
+                    <Option key={seriesItem.title} value={seriesItem.title}>
+                      {seriesItem.title}
+                    </Option>
+                  )
+                })}
+              </Select>
+            </Form.Item>
+          )}
+
+          <Form.Item label="New Series" tooltip="Enter a new Series">
             <Controller
               as={<Input />}
               control={control}
