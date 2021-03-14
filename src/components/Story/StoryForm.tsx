@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/client'
-import { Form, Input, Button, Switch, InputNumber, Upload, Spin, Select } from 'antd'
+import { Form, Input, Button, Switch, InputNumber, Upload, Spin, Select, Divider } from 'antd'
 import Link from 'next/link'
-import { UploadOutlined } from '@ant-design/icons'
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
 
 type RequiredMark = boolean | 'optional'
 
@@ -68,6 +68,8 @@ const StoryForm = (props) => {
     setRequiredMarkType(requiredMark)
   }
   const [session, loading] = useSession()
+  const [dropdownList, setDropdownList] = useState([])
+  const [seriesName, setSeriesName] = useState('')
 
   const { loading: isLoading, error: seriesError, data: seriesData } = useQuery(GET_SERIES, {
     variables: {
@@ -79,6 +81,10 @@ const StoryForm = (props) => {
     },
   })
 
+  useEffect(() => {
+    setDropdownList(seriesData?.series)
+  }, [seriesData])
+
   if (loading || isLoading) {
     return (
       <div className="flex justify-center mt-8 text-center">
@@ -89,6 +95,33 @@ const StoryForm = (props) => {
         </div>
       </div>
     )
+  }
+
+  const uniqueBy = (arr, prop) => {
+    return arr.reduce((a, d) => {
+      if (!a.includes(d[prop])) {
+        a.push(d)
+      }
+      return a
+    }, [])
+  }
+
+  const addItem = () => {
+    console.log('list', dropdownList)
+    const dupe = dropdownList.find((item) => item.title === seriesName)
+
+    if (!dupe && seriesName) {
+      setDropdownList([
+        ...dropdownList,
+        {
+          title: seriesName,
+        },
+      ])
+
+      setSeriesName('')
+    } else {
+      setDropdownList([...dropdownList])
+    }
   }
 
   const onDelete = async () => {
@@ -227,6 +260,10 @@ const StoryForm = (props) => {
     setFileList(e.fileList)
   }
 
+  const onNameChange = (event) => {
+    setSeriesName(event.target.value)
+  }
+
   return (
     <>
       {formType === 'create' && <h2>Create a New Story</h2>}
@@ -285,21 +322,47 @@ const StoryForm = (props) => {
               control={control}
             />
           </Form.Item>
-          {seriesData.series && (
+          {dropdownList && (
             <Form.Item label="Select Series" tooltip="Is your story part of an epic trilogy?">
-              <Select defaultValue={storyToEdit?.series?.title} onChange={handleChange}>
-                {seriesData.series.map((seriesItem) => {
-                  return (
-                    <Option key={seriesItem.title} value={seriesItem.title}>
-                      {seriesItem.title}
-                    </Option>
-                  )
-                })}
-              </Select>
+              <Controller
+                as={
+                  <Select
+                    defaultValue={storyToEdit?.series?.title}
+                    onChange={handleChange}
+                    dropdownRender={(menu) => (
+                      <div>
+                        {menu}
+                        <Divider style={{ margin: '4px 0' }} />
+                        <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+                          <Input style={{ flex: 'auto' }} onChange={onNameChange} />
+                          <a
+                            style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
+                            onClick={addItem}
+                          >
+                            <PlusOutlined /> Add item
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  >
+                    {dropdownList.map((seriesItem) => {
+                      return (
+                        <Option key={seriesItem.title} value={seriesItem.title}>
+                          {seriesItem.title}
+                        </Option>
+                      )
+                    })}
+                  </Select>
+                }
+                control={control}
+                defaultValue={storyToEdit?.series?.title}
+                disabled={isSubmitting}
+                name="series"
+              />
             </Form.Item>
           )}
 
-          <Form.Item label="New Series" tooltip="Enter a new Series">
+          {/* <Form.Item label="New Series" tooltip="Enter a new Series">
             <Controller
               as={<Input />}
               control={control}
@@ -307,7 +370,7 @@ const StoryForm = (props) => {
               disabled={isSubmitting}
               name="series"
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="Published?" valuePropName="checked">
             <Controller
               as={<Switch />}
