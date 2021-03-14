@@ -97,17 +97,7 @@ const StoryForm = (props) => {
     )
   }
 
-  const uniqueBy = (arr, prop) => {
-    return arr.reduce((a, d) => {
-      if (!a.includes(d[prop])) {
-        a.push(d)
-      }
-      return a
-    }, [])
-  }
-
   const addItem = () => {
-    console.log('list', dropdownList)
     const dupe = dropdownList.find((item) => item.title === seriesName)
 
     if (!dupe && seriesName) {
