@@ -11,7 +11,6 @@ import { gql, useMutation, useQuery } from '@apollo/client'
 import { uploadDocumentsApi } from '../../pages/api/files/uploadFileApi'
 import Modal from 'antd/lib/modal/Modal'
 import removeEmpty from '../../util/removeEmpty'
-import { Option } from 'antd/lib/mentions'
 
 const CREATE_STORY = gql`
   mutation storyMutation($data: StoryCreateInput!) {

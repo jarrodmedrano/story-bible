@@ -1,5 +1,5 @@
 {
-  "name": "prisma-next-auth-graphql-starter",
+  "name": "story-bible",
   "version": "1.0.2",
   "description": "",
   "scripts": {
@@ -29,7 +29,7 @@
     "fullstack",
     "auth"
   ],
-  "author": "Taras Protchenko",
+  "author": "Jarrod Medrano",
   "license": "ISC",
   "dependencies": {
     "@apollo/client": "3.3.4",
