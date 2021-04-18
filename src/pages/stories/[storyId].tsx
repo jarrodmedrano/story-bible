@@ -6,7 +6,7 @@ import { Button } from 'antd'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Meta } from 'antd/lib/list/Item'
-import Layout, { Header } from 'antd/lib/layout/layout'
+import Layout from 'antd/lib/layout/layout'
 
 const GET_STORY = gql`
   query stories($data: StoryWhereInput!) {

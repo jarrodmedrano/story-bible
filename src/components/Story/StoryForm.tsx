@@ -70,7 +70,7 @@ const StoryForm = (props) => {
   const [dropdownList, setDropdownList] = useState([])
   const [seriesName, setSeriesName] = useState('')
 
-  const { loading: isLoading, error: seriesError, data: seriesData } = useQuery(GET_SERIES, {
+  const { loading: isLoading, data: seriesData } = useQuery(GET_SERIES, {
     variables: {
       where: {
         authorId: {
