@@ -18,6 +18,9 @@ const GET_STORY = gql`
       description
       part
       published
+      series {
+        title
+      }
     }
   }
 `
@@ -54,7 +57,7 @@ const EditPage = () => {
             <Col span={14} push={1}></Col>
           </Row>
           <Row>
-            <Col span={4}>
+            <Col xs={24} xl={{ span: 4 }}>
               <Space direction="vertical">
                 <Card
                   key={story.id}
@@ -73,10 +76,15 @@ const EditPage = () => {
                 </Card>
               </Space>
             </Col>
-            <Col span={16} push={1}>
+            <Col xs={24} xl={{ span: 16, push: 2, pull: 5 }}>
               <h1>{story.title}</h1>
-              <h2>{story.subTitle}</h2>
-              <p>{story.description}</p>
+              {story?.subTitle && <h2>{story.subTitle}</h2>}
+              {story?.series?.title && (
+                <h3>
+                  {story.series.title} {story?.part && `Part ${story.part}`}
+                </h3>
+              )}
+              {story?.description && <p>{story.description}</p>}
 
               <Space direction="horizontal">
                 <Link href={`/stories/edit/${story.id}`} passHref>
