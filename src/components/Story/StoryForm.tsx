@@ -97,6 +97,7 @@ const StoryForm = (props) => {
   }
 
   const addItem = () => {
+    console.log('me', dropdownList)
     const dupe = dropdownList.find((item) => item.title === seriesName)
 
     if (!dupe && seriesName) {

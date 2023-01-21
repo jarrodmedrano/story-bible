@@ -53,6 +53,7 @@ model User {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
+  Character Character[]
   @@map(name: "users")
 }
 
@@ -75,7 +76,7 @@ model Story {
   characters  Character[]
   title       String
   subTitle    String?
-  part        Int?
+  part        Int?        @unique
   description String?
   thumbnail   String?
   private     Boolean     @default(false)
@@ -83,7 +84,7 @@ model Story {
   createdAt   DateTime    @default(now()) @map(name: "created_at")
   updatedAt   DateTime    @default(now()) @map(name: "updated_at")
 
-  seriesId Int?
+  seriesId Int? @unique
   @@map(name: "stories")
 }
 
@@ -104,6 +105,9 @@ model Series {
 model Character {
   id          Int      @id @default(autoincrement())
   story       Story    @relation(fields: [storyId], references: [id])
+  author      User     @relation(fields: [authorId], references: [id])
+  part        Int[]
+  authorId    Int
   storyId     Int
   name        String?
   age         Int?

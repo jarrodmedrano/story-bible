@@ -25,7 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   Home
                 </Link>
               </Menu.Item>
-              <SubMenu key="SubMenu" title="Story">
+              <SubMenu key="SubMenu" title="Stories">
                 <Menu.Item key="setting:1">
                   <Link href="/stories" passHref>
                     List
@@ -33,6 +33,19 @@ export default function App({ Component, pageProps }: AppProps) {
                 </Menu.Item>
                 <Menu.Item key="setting:2">
                   <Link href="/stories/create" passHref>
+                    Create
+                  </Link>
+                </Menu.Item>
+              </SubMenu>
+
+              <SubMenu key="CharacterMenu" title="Characters">
+                <Menu.Item key="character:1">
+                  <Link href="/characters" passHref>
+                    List
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="character:2">
+                  <Link href="/characters/create" passHref>
                     Create
                   </Link>
                 </Menu.Item>
