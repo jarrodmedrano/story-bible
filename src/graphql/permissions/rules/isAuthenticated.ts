@@ -3,7 +3,5 @@ import { rule } from 'graphql-shield'
 
 export const isAuthenticated = rule({ cache: 'contextual' })(async (_parent, _args, { req }, _info) => {
   const session = await getSession({ req })
-  console.log('session', session)
-  // /return Boolean(session)
-  return true
+  return Boolean(session)
 })
